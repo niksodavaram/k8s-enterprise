@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: artifactory-postgres
+  namespace: artifactory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: artifactory-postgres
+  template:
+    metadata:
+      labels:
+        app: artifactory-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:13
+          env:
+            - name: POSTGRES_DB
+              value: artifactorydb
+            - name: POSTGRES_USER
+              value: artifactory
+            - name: POSTGRES_PASSWORD
+              value: artifactorypassword
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: artifactory-postgres-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: artifactory-postgres
+  namespace: artifactory
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    app: artifactory-postgres
+

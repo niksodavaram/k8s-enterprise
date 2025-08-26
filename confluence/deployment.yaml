@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: confluence
+  namespace: confluence
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: confluence
+  template:
+    metadata:
+      labels:
+        app: confluence
+    spec:
+      containers:
+        - name: confluence
+          image: atlassian/confluence-server:latest
+          ports:
+            - containerPort: 8090
+          env:
+            - name: ATL_JDBC_URL
+              value: jdbc:postgresql://confluence-postgres:5432/confluencedb
+            - name: ATL_JDBC_USER
+              value: confluenceuser
+            - name: ATL_JDBC_PASSWORD
+              value: confluencepassword
+          volumeMounts:
+            - name: confluence-home
+              mountPath: /var/atlassian/application-data/confluence
+      volumes:
+        - name: confluence-home
+          persistentVolumeClaim:
+            claimName: confluence-home-pvc

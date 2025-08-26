@@ -1,0 +1,29 @@
+resources:
+  # Namespaces
+  - namespaces/jira-namespace.yaml
+  - namespaces/confluence-namespace.yaml
+  - namespaces/artifactory-namespace.yaml
+  - namespaces/jenkins-namespace.yaml
+
+  # Jira
+  - jira/pvc.yaml
+  - jira/postgres.yaml
+  - jira/deployment.yaml
+  - jira/service.yaml
+
+  # Confluence
+  - confluence/pvc.yaml
+  - confluence/postgres.yaml
+  - confluence/deployment.yaml
+  - confluence/service.yaml
+
+  # Artifactory
+  - artifactory/pvc.yaml
+  - artifactory/postgres.yaml
+  - artifactory/deployment.yaml
+  - artifactory/service.yaml
+
+  # Jenkins
+  - jenkins/pvc.yaml
+  - jenkins/deployment.yaml
+  - jenkins/service.yaml

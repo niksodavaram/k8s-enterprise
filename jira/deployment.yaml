@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jira
+  namespace: jira
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jira
+  template:
+    metadata:
+      labels:
+        app: jira
+    spec:
+      containers:
+        - name: jira
+          image: atlassian/jira-software:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ATL_JDBC_URL
+              value: jdbc:postgresql://jira-postgres:5432/jiradb
+            - name: ATL_JDBC_USER
+              value: jirauser
+            - name: ATL_JDBC_PASSWORD
+              value: jirapassword
+          volumeMounts:
+            - name: jira-home
+              mountPath: /var/atlassian/application-data/jira
+      volumes:
+        - name: jira-home
+          persistentVolumeClaim:
+            claimName: jira-home-pvc
